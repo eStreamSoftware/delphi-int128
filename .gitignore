@@ -1,0 +1,14 @@
+Win32/
+Win64/
+*.local
+*.res
+*.identcache
+*.dsk
+*.tvsconfig
+*.dres
+*.tlb
+*.sds
+*Resource.rc
+*.stat
+*.dcu
+__recovery

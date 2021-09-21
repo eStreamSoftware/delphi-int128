@@ -1,0 +1,15 @@
+= Introduction
+
+Delphi implementation of `int128` data type using https://docwiki.embarcadero.com/RADStudio/Sydney/en/Operator_Overloading_(Delphi)[operator overloading].
+
+Valid range: `-170,141,183,460,469,231,731,687,303,715,884,105,728` to `170,141,183,460,469,231,731,687,303,715,884,105,727`
+
+= Example
+
+[source,pascal]
+var a: Int128;
+begin
+  a := High(UInt64);
+  a := 2 * a;
+  WriteLn(a);  // 36893488147419103232
+end.
