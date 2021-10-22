@@ -206,7 +206,10 @@ class operator UInt128.Multiply(a: UInt128; b: UInt128): UInt128;
 var
   qw: UInt64;
   v: UInt128;
+  over: boolean;
 begin
+  over := false;
+
   qw := UInt64(a.c0) * UInt64(b.c0);
   Result.c0 := qw and $FFFFFFFF;
   Result.c1 := qw shr 32;
@@ -253,6 +256,7 @@ begin
   v.c1 := 0;
   v.c2 := 0;
   v.c3 := qw and $FFFFFFFF;
+  if qw shr 32 <> 0 then over := True;
   Result := Result + v;
 
   qw := UInt64(a.c1) * UInt64(b.c2);
@@ -260,6 +264,7 @@ begin
   v.c1 := 0;
   v.c2 := 0;
   v.c3 := qw and $FFFFFFFF;
+  if qw shr 32 <> 0 then over := True;
   Result := Result + v;
 
   qw := UInt64(a.c2) * UInt64(b.c1);
@@ -267,6 +272,7 @@ begin
   v.c1 := 0;
   v.c2 := 0;
   v.c3 := qw and $FFFFFFFF;
+  if qw shr 32 <> 0 then over := True;
   Result := Result + v;
 
   qw := UInt64(a.c3) * UInt64(b.c0);
@@ -274,10 +280,11 @@ begin
   v.c1 := 0;
   v.c2 := 0;
   v.c3 := qw and $FFFFFFFF;
+  if qw shr 32 <> 0 then over := True;
   Result := Result + v;
 
-  if qw and $100000000 <> 0 then raise EIntOverflow.Create('Integer Overflow');
-
+  if over then raise EIntOverflow.Create('Integer Overflow');
+  if (Result = 0) and (a <> 0) and (b <> 0) then raise EIntOverflow.Create('Integer Overflow');
 end;
 
 class operator UInt128.IntDivide(a: UInt128; b: UInt128): UInt128;

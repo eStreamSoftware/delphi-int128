@@ -419,9 +419,10 @@ end;
 class operator Int128.Multiply(a, b: Int128): Int128;
 var qw: UInt64;
     v: Int128;
-    neg: Boolean;
+    neg, over: Boolean;
 begin
   neg := false;
+  over := false;
   if (a < 0) xor (b < 0) then neg := true;
 
   if a < 0 then a := -a;
@@ -473,6 +474,7 @@ begin
   v.c1 := 0;
   v.c2 := 0;
   v.c3 := qw and $ffffffff;
+  if qw shr 32 <> 0 then over := True;
   Result := Result + v;
 
   qw := UInt64(a.c1) * UInt64(b.c2);
@@ -480,6 +482,7 @@ begin
   v.c1 := 0;
   v.c2 := 0;
   v.c3 := qw and $ffffffff;
+  if qw shr 32 <> 0 then over := True;
   Result := Result + v;
 
   qw := UInt64(a.c2) * UInt64(b.c1);
@@ -487,6 +490,7 @@ begin
   v.c1 := 0;
   v.c2 := 0;
   v.c3 := qw and $ffffffff;
+  if qw shr 32 <> 0 then over := True;
   Result := Result + v;
 
   qw := UInt64(a.c3) * UInt64(b.c0);
@@ -494,10 +498,12 @@ begin
   v.c1 := 0;
   v.c2 := 0;
   v.c3 := qw and $ffffffff;
+  if qw shr 32 <> 0 then over := True;
   Result := Result + v;
 
   if (Result < a) and (Result < b) then raise EIntOverflow.Create('Integer Overflow');
-
+  if (Result = 0) and (a <> 0) and (b <> 0) then raise EIntOverflow.Create('Integer Overflow');
+  if over then raise EIntOverflow.Create('Integer Overflow');
   if neg then Result := -Result;
 end;
 

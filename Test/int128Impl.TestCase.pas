@@ -33,6 +33,13 @@ type
     procedure Test_BitwiseXor;
     procedure Test_Int128_To_UInt128;
     procedure Test_UInt128_To_Int128;
+    procedure Test_Overflow_Add;
+    procedure Test_Overflow_Subtract;
+    procedure Test_Overflow_Multiply;
+    procedure Test_Overflow128;
+    procedure Test_ConvertError;
+    procedure Test_ConvertError32;
+    procedure Test_DivBy0;
   end;
 
   TUInt128_TestCase = class (TTestCase)
@@ -59,6 +66,10 @@ type
     procedure Test_BitwiseAnd;
     procedure Test_BitwiseOr;
     procedure Test_BitwiseXor;
+    procedure Test_Overflow_Add;
+    procedure Test_Overflow_Multiply;
+    procedure Test_RangeCheck_Sub;
+    procedure Test_Divby0;
   end;
 
 implementation
@@ -242,6 +253,25 @@ begin
   CheckEquals('7109006678741189941572731945228', A xor B);
 end;
 
+procedure TInt128_TestCase.Test_Overflow128;
+begin
+  StartExpectingException(EIntOverflow);
+  var A: Int128 := '64798548145465497148876842174687164674572';
+end;
+
+procedure TInt128_TestCase.Test_ConvertError;
+begin
+  StartExpectingException(EConvertError);
+  var A: Int128 := '654846546846+48974654097854654874'; // illegal char
+end;
+
+procedure TInt128_TestCase.Test_ConvertError32;
+begin
+  StartExpectingException(EConvertError);
+  var A: Int128 := '65465489746548768147891861780';
+  var B: Int32 := Int32(A);
+end;
+
 procedure TInt128_TestCase.Test_Subtraction;
 begin
   var A, B: Int128;
@@ -285,7 +315,38 @@ begin
 
   A := '709711949013741918793';
   B := '479465461154789840';
-  CheckEquals('340282366920938463463035577984261463120', B * A);
+  CheckEquals('340282366920938463463035577984261463120', B * A); // UInt128
+end;
+
+procedure TInt128_TestCase.Test_DivBy0;
+begin
+  StartExpectingException(EMathError);
+  var A: Int128 := '445646540198048648436376843210';
+  A := A div 0;
+end;
+
+procedure TInt128_TestCase.Test_Overflow_Add;
+begin
+  StartExpectingException(EIntOverflow);
+  var A: Int128 := '85070591730234615865843651857942052864';
+  A := A + A;
+end;
+
+procedure TInt128_TestCase.Test_Overflow_Multiply;
+begin
+  StartExpectingException(EIntOverflow);
+  var A: Int128 := '36893488147419103232';
+  var B: Int128 := '36893488147419103232';
+  A := A * B;
+end;
+
+procedure TInt128_TestCase.Test_Overflow_Subtract;
+begin
+  StartExpectingException(EIntOverflow);
+  var A, B: Int128;
+  A := '-170141183460469231731687303715884105727';
+  B := '1147215874';
+  A := A - B;
 end;
 
 procedure TInt128_TestCase.Test_Division;
@@ -797,6 +858,28 @@ begin
   CheckTrue(A <> B);
 end;
 
+procedure TUInt128_TestCase.Test_Overflow_Add;
+begin
+  StartExpectingException(EIntOverflow);
+  var A : UInt128 := '340282366920938463463374607431768211455';
+  A := A + 1;
+end;
+
+procedure TUInt128_TestCase.Test_Overflow_Multiply;
+begin
+  StartExpectingException(EIntOverflow);
+  var A: UInt128 := '36893488147419103232';
+  var B: UInt128 := '68484654574846548748';
+  A := A * B;
+end;
+
+procedure TUInt128_TestCase.Test_RangeCheck_Sub;
+begin
+  StartExpectingException(EIntOverflow);
+  var A: UInt128 := '37465154764';
+  A := A - '67897465465456465104894';
+end;
+
 procedure TUInt128_TestCase.Test_RightShift;
 var A, B: UInt128;
 begin
@@ -823,7 +906,13 @@ begin
 
   B := A shr -75;
   CheckEquals('54', B);
+end;
 
+procedure TUInt128_TestCase.Test_Divby0;
+begin
+  StartExpectingException(EMathError);
+  var A : UInt128 := '648456454';
+  A := A div 0;
 end;
 
 procedure TUInt128_TestCase.Test_Divide;
