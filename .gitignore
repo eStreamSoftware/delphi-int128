@@ -12,3 +12,4 @@ Win64/
 *.stat
 *.dcu
 __recovery
+__history
