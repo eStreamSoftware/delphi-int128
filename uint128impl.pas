@@ -51,7 +51,7 @@ end;
 
 implementation
 
-{ UInt128 }
+uses System.SysConst;
 
 class procedure UInt128.SetBit128(var Value: UInt128; numBit: integer);
 begin
@@ -80,7 +80,7 @@ class procedure UInt128.DivModU128(a, b: UInt128; out DivResult: UInt128; out
     Remainder: UInt128);
 var Shift : Integer;
 begin
-  if b = 0 then raise EMathError.Create('Divide by Zero.');
+  if b = 0 then raise EDivByZero.Create(SDivByZero);
 
   if a = 0 then begin
     DivResult := 0;
@@ -131,7 +131,7 @@ var qw: UInt64;
   begin
     if Result.c3 = $FFFFFFFF then
     begin
-      raise EIntOverflow.Create('Integer Overflow');
+      raise EIntOverflow.Create(SIntOverflow);
     end else
       Inc(Result.c3);
   end;
@@ -172,13 +172,13 @@ begin
   if c0 then inc1;
   if c1 then inc2;
   if c2 then inc3;
-  if c3 then raise EIntOverflow.Create('Integer Overflow');
+  if c3 then raise EIntOverflow.Create(SIntOverflow);
 end;
 
 {$OVERFLOWCHECKS OFF}
 class operator UInt128.Subtract(a, b: UInt128): UInt128;
 begin
-  if b > a then raise EIntOverflow.Create('Integer overflow')
+  if b > a then raise EIntOverflow.Create(SIntOverflow)
   else begin
     Result.dc0 := a.dc0 - b.dc0;
     Result.dc1 := a.dc1 - b.dc1;
@@ -283,8 +283,8 @@ begin
   if qw shr 32 <> 0 then over := True;
   Result := Result + v;
 
-  if over then raise EIntOverflow.Create('Integer Overflow');
-  if (Result = 0) and (a <> 0) and (b <> 0) then raise EIntOverflow.Create('Integer Overflow');
+  if over then raise EIntOverflow.Create(SIntOverflow);
+  if (Result = 0) and (a <> 0) and (b <> 0) then raise EIntOverflow.Create(SIntOverflow);
 end;
 
 class operator UInt128.IntDivide(a: UInt128; b: UInt128): UInt128;
@@ -334,7 +334,7 @@ begin
   end;
 
   if (length(a) > 1) and (Result = 0) then
-     raise EIntOverflow.Create('Integer Overflow.');
+     raise EIntOverflow.Create(SIntOverflow);
 end;
 
 class operator UInt128.Implicit(a: UInt128): string;
@@ -384,7 +384,7 @@ end;
 
 class operator UInt128.Negative(a: UInt128): UInt128;
 begin
-  raise EIntOverflow.Create('Integer Overflow');
+  raise EIntOverflow.Create(SIntOverflow);
 end;
 
 class operator UInt128.NotEqual(a: UInt128; b: UInt128): Boolean;

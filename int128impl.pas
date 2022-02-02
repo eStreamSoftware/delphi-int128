@@ -65,6 +65,8 @@ type
 
 implementation
 
+uses System.SysConst;
+
 class operator Int128.Negative(a: Int128): Int128;
 begin
   Result := not a + 1;
@@ -76,7 +78,7 @@ var curShift: integer;
     sub: Int128;
     neg: Boolean;
 begin
-  if Value2 = 0 then raise EMathError.Create('DivMod128: div by zero');
+  if Value2 = 0 then raise EDivByZero.Create(SDivByZero);
 
   sub := Value2;
   Remainder := Value1;
@@ -191,7 +193,7 @@ begin
   end;
   if neg then Result := -Result;
 
-  if (length(Value) > 1) and (Result = 0) then raise EIntOverflow.Create('Integer Overflow.');
+  if (length(Value) > 1) and (Result = 0) then raise EIntOverflow.Create(SIntOverflow);
 
 
 end;
@@ -271,10 +273,10 @@ begin
   if c2 then inc3;
 
   if ((Result < 0) and (a > 0) and (b > 0)) then
-     raise EIntOverflow.Create('Integer Overflow');
+     raise EIntOverflow.Create(SIntOverflow);
 
   if ((Result > 0) and (a < 0) and (b < 0)) then
-     raise EIntOverflow.Create('Integer Overflow');
+     raise EIntOverflow.Create(SIntOverflow);
 
 end;
 
@@ -501,9 +503,9 @@ begin
   if qw shr 32 <> 0 then over := True;
   Result := Result + v;
 
-  if (Result < a) and (Result < b) then raise EIntOverflow.Create('Integer Overflow');
-  if (Result = 0) and (a <> 0) and (b <> 0) then raise EIntOverflow.Create('Integer Overflow');
-  if over then raise EIntOverflow.Create('Integer Overflow');
+  if (Result < a) and (Result < b) then raise EIntOverflow.Create(SIntOverflow);
+  if (Result = 0) and (a <> 0) and (b <> 0) then raise EIntOverflow.Create(SIntOverflow);
+  if over then raise EIntOverflow.Create(SIntOverflow);
   if neg then Result := -Result;
 end;
 

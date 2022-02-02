@@ -320,7 +320,7 @@ end;
 
 procedure TInt128_TestCase.Test_DivBy0;
 begin
-  StartExpectingException(EMathError);
+  StartExpectingException(EDivByZero);
   var A: Int128 := '445646540198048648436376843210';
   A := A div 0;
 end;
@@ -910,7 +910,7 @@ end;
 
 procedure TUInt128_TestCase.Test_Divby0;
 begin
-  StartExpectingException(EMathError);
+  StartExpectingException(EDivByZero);
   var A : UInt128 := '648456454';
   A := A div 0;
 end;
