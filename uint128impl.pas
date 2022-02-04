@@ -48,7 +48,7 @@ type
       2: (c0, c1, c2, c3: UInt32);
       3: (c: packed array [0..3] of UInt32);
       4: (dc0, dc1: UInt64);
-      5: (dc: packed array [0..1] of UInt64);
+      {5: (dc: packed array [0..1] of UInt64);}
 end;
 
 implementation
@@ -327,7 +327,7 @@ begin
   Result := 0;
   ten := 10;
   for i := 1 to length(a) do begin
-    if a[i] in ['0'..'9'] then begin
+    if CharInSet(a[i], ['0'..'9']) then begin
       Result := Result * ten;
       Result := Result + UInt32(Ord(a[i]) - Ord('0'));
     end

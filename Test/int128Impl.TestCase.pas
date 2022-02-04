@@ -199,7 +199,7 @@ end;
 
 procedure TInt128_TestCase.Test_Int128;
 begin
-  var A, B: Int128;
+  var A: Int128;
   A := High(UInt64);
   A := A + High(UInt64);
   CheckEquals('36893488147419103230', A);
@@ -269,7 +269,7 @@ procedure TInt128_TestCase.Test_ConvertError32;
 begin
   StartExpectingException(EConvertError);
   var A: Int128 := '65465489746548768147891861780';
-  var B: Int32 := Int32(A);
+  Int32(A);
 end;
 
 procedure TInt128_TestCase.Test_Subtraction;

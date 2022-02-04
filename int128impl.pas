@@ -14,9 +14,6 @@ type
         out DivResult: Int128; out Remainder: Int128); static;
     class procedure Inc128(var Value: Int128); static;
     class procedure SetBit128(var Value: Int128; numBit: integer); static;
-    class procedure UnsetBit128(var Value: Int128; numBit: integer); static;
-    class function GetBit128(var Value: Int128; numBit: integer): integer; static;
-    class procedure ToggleBit128(var Value: Int128; numBit: integer); static;
     class function StrToInt128(Value: String): Int128; static; inline;
     function Invert: Int128;
   public
@@ -152,21 +149,6 @@ begin
   Value.c[numBit shr 5] := Value.c[numBit shr 5] or longword(1 shl (numBit and 31));
 end;
 
-class procedure Int128.UnsetBit128(var Value: Int128; numBit: Integer);
-begin
-  Value.c[numBit shr 5] := Value.c[numBit shr 5] and not longword(1 shl (numBit and 31));
-end;
-
-class function Int128.GetBit128(var Value: Int128; numBit: Integer): integer;
-begin
-  Result := (Value.c[numBit shr 5] shr (numBit and 31)) and 1;
-end;
-
-class procedure Int128.ToggleBit128(var Value: Int128; numBit: Integer);
-begin
-  Value.c[numBit shr 5] := Value.c[numBit shr 5] xor longword(1 shl (numBit and 31));
-end;
-
 class function Int128.StrToInt128(Value: string): Int128;
 var
   i: Integer;
@@ -185,7 +167,7 @@ begin
   neg := False;
 
   for i := 1 to length(Value) do begin
-    if Value[i] in ['0'..'9'] then begin
+    if CharInSet(Value[i], ['0'..'9']) then begin
       Result := Result * ten;
       Result := Result + Int32(Ord(Value[i]) - Ord('0'));
     end else if (i = 1) and (Value[i] = '-') then
@@ -222,7 +204,7 @@ end;
 
 class operator Int128.Add(a, b: Int128): Int128;
 var qw: UInt64;
-    c0, c1, c2, uc3, sc3, signed: Boolean;
+    c0, c1, c2: Boolean;
   procedure inc3;
   begin
     if Result.c3 = $ffffffff then
