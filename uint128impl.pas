@@ -5,6 +5,8 @@ interface
 uses System.SysUtils;
 
 type
+  PUInt128 = ^UInt128;
+
   UInt128 = packed record
   private
     class procedure DivModU128(a, b: UInt128; out DivResult: UInt128; out

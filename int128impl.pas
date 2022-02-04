@@ -6,6 +6,8 @@ uses System.SysUtils, uint128impl;
 
 type
   // https://forum.lazarus.freepascal.org/index.php/topic,17273.15.html
+  PInt128 = ^Int128;
+
   Int128 = packed record
   private
     class procedure DivMod128(const Value1: Int128; const Value2: Int128;
