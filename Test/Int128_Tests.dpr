@@ -13,8 +13,7 @@ program Int128_Tests;
 uses
   DUnitTestRunner,
   int128impl in '..\int128impl.pas',
-  int128Impl.TestCase in 'int128Impl.TestCase.pas',
-  uint128impl in '..\uint128impl.pas';
+  int128Impl.TestCase in 'int128Impl.TestCase.pas';
 
 {$R *.RES}
 begin

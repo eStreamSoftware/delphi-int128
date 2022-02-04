@@ -76,7 +76,7 @@ type
 
 implementation
 
-uses int128impl, uint128impl, System.SysUtils;
+uses int128impl, System.SysUtils;
 
 procedure TInt128_TestCase.Size;
 begin

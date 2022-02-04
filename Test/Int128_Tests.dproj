@@ -141,7 +141,6 @@
         </DelphiCompile>
         <DCCReference Include="..\int128impl.pas"/>
         <DCCReference Include="int128Impl.TestCase.pas"/>
-        <DCCReference Include="..\uint128impl.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
