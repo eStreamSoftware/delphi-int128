@@ -52,6 +52,7 @@ type
     class operator BitwiseXor(a, b: Int128): Int128;
     class operator BitwiseAnd(a, b: Int128): Int128;
     class operator Negative(a: Int128): Int128;
+    function ToString: string;
   strict private
     case Byte of
       0: (b: packed array[0..15] of UInt8);
@@ -525,6 +526,11 @@ begin
   c := not b;
   Inc128(c);
   Result := a + c;
+end;
+
+function Int128.ToString: string;
+begin
+  Result := Self;
 end;
 
 class operator Int128.IntDivide(a, b: Int128): Int128;

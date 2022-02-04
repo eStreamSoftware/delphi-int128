@@ -40,6 +40,7 @@ type
     procedure Test_ConvertError;
     procedure Test_ConvertError32;
     procedure Test_DivBy0;
+    procedure Test_ToString;
   end;
 
   TUInt128_TestCase = class (TTestCase)
@@ -70,6 +71,7 @@ type
     procedure Test_Overflow_Multiply;
     procedure Test_RangeCheck_Sub;
     procedure Test_Divby0;
+    procedure Test_ToString;
   end;
 
 implementation
@@ -283,6 +285,18 @@ begin
   B := Int128('6546854355185413546841514354685431');
   A := B - A;
   CheckEquals('204161131033027512911150307976935741', A);
+end;
+
+procedure TInt128_TestCase.Test_ToString;
+begin
+  var A: Int128;
+  A := 0;
+  CheckEquals('0', A.ToString);
+
+  A := 1;
+  A := A shl 127;
+  A := not A;
+  CheckEquals('170141183460469231731687303715884105727', A.ToString);
 end;
 
 procedure TInt128_TestCase.Test_Multiplication;
@@ -1048,6 +1062,17 @@ begin
   CheckTrue(UInt128(C) <= A);
   CheckFalse(A <= C);
 
+end;
+
+procedure TUInt128_TestCase.Test_ToString;
+begin
+  var A: UInt128;
+  A := 0;
+  CheckEquals('0', A.ToString);
+
+  A := 0;
+  A := not A;
+  CheckEquals('340282366920938463463374607431768211455', A.ToString);
 end;
 
 initialization

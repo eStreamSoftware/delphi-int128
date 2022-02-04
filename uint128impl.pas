@@ -13,6 +13,7 @@ type
         Remainder: UInt128); static;
     class procedure SetBit128(var Value: UInt128; numBit: integer); static;
   public
+    function ToString: string;
     class operator Implicit(a: UInt8): UInt128;
     class operator Implicit(a: UInt16): UInt128;
     class operator Implicit(a: UInt32): UInt128;
@@ -124,6 +125,11 @@ begin
     end else break;
 
   end;
+end;
+
+function UInt128.ToString: string;
+begin
+  Result := Self;
 end;
 
 class operator UInt128.Add(a, b: UInt128): UInt128;
