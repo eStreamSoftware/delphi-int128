@@ -2,7 +2,7 @@
     <PropertyGroup>
         <ProjectGuid>{CD6258BC-4044-4BCD-BA35-19C74AC571E8}</ProjectGuid>
         <MainSource>Int128.dpk</MainSource>
-        <ProjectVersion>19.3</ProjectVersion>
+        <ProjectVersion>19.4</ProjectVersion>
         <FrameworkType>None</FrameworkType>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>
