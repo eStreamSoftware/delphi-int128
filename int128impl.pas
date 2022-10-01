@@ -111,6 +111,9 @@ type
       5: (dc: packed array[0..1] of UInt64);
   end;
 
+const
+  Ten: UInt128 = (dc0: $A; dc1: 0);
+
 implementation
 
 uses System.SysConst;
@@ -387,13 +390,11 @@ end;
 class operator UInt128.Implicit(a: string): UInt128;
 var
   i: Integer;
-  ten: UInt128;
 begin
   Result := 0;
-  ten := 10;
   for i := 1 to length(a) do begin
     if CharInSet(a[i], ['0'..'9']) then begin
-      Result := Result * ten;
+      Result := Result * Ten;
       Result := Result + UInt32(Ord(a[i]) - Ord('0'));
     end
     else
@@ -405,10 +406,9 @@ begin
 end;
 
 class operator UInt128.Implicit(a: UInt128): string;
-var Ten, digit: UInt128;
+var digit: UInt128;
 begin
   Result := '';
-  Ten := 10;
 
   while a <> 0 do begin
     DivModU128(a, Ten, a, digit);
@@ -598,7 +598,6 @@ end;
 class function Int128.StrToInt128(Value: string): Int128;
 var
   i: Integer;
-  ten: Int128;
   neg: Boolean;
 begin
 
@@ -609,12 +608,11 @@ begin
   end;
 
   Result := 0;
-  ten := 10;
   neg := False;
 
   for i := 1 to length(Value) do begin
     if CharInSet(Value[i], ['0'..'9']) then begin
-      Result := Result * ten;
+      Result := Result * Ten;
       Result := Result + Int32(Ord(Value[i]) - Ord('0'));
     end else if (i = 1) and (Value[i] = '-') then
       neg := True
@@ -772,7 +770,7 @@ begin
 end;
 
 class operator Int128.Implicit(Value: Int128): string;
-var digit, curValue, nextValue, ten: Int128;
+var digit, curValue, nextValue: Int128;
     Neg: Boolean;
 begin
   if (Value.c3 = $80000000) and (Value.c2 = 0)
@@ -783,7 +781,6 @@ begin
   end;
 
   Result := '';
-  ten := 10;
   if Value.b[15] shr 7 = 1 then begin
     curValue := UInt128(Value.Invert()) + 1;
     Neg := True;
@@ -793,7 +790,7 @@ begin
   end;
 
   while CurValue <> 0 do begin
-    DivMod128(CurValue, ten, nextValue, digit);
+    DivMod128(CurValue, Ten, nextValue, digit);
     Result := Chr(Ord('0') + digit.c0) + Result;
     curValue := NextValue;
   end;
