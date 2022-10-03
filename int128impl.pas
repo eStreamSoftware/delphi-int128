@@ -113,6 +113,7 @@ type
 
 const
   Ten: UInt128 = (dc0: $A; dc1: 0);
+  Neg1: Int128 = (dc0: 0; dc1: $8000000000000000);
 
 implementation
 
@@ -522,12 +523,17 @@ begin
   sub := Value2;
   Remainder := Value1;
   DivResult := 0;
-  neg := false;
 
-  if (sub.c3 and $80000000 <> 0) xor (Remainder.c3 and $80000000 <> 0)
-  then neg:= true;
+  neg := (sub.c3 and $80000000 <> 0) xor (Remainder.c3 and $80000000 <> 0);
+
   if (sub.c3 and $80000000 <> 0) then sub := -sub;
-  if (Remainder.c3 and $80000000 <> 0) then Remainder := -Remainder;
+
+  var bIsNeg1 := Remainder = Neg1;
+
+  if bIsNeg1 then
+    Remainder := Remainder.Invert
+  else if (Remainder.c3 and $80000000 <> 0) then
+    Remainder := -Remainder;
 
   // if divisor = 1
   if sub = 1 then begin
@@ -561,12 +567,12 @@ begin
       sub := sub shr 1;
       dec(curShift);
     end else
-      break;
+      Break;
   end;
 
   if neg then DivResult := -DivResult;
-  if (Value1 < 0) then Remainder := -Remainder;
 
+  if bIsNeg1 then Inc(Remainder);
 end;
 
 class procedure Int128.Inc128(var Value: Int128);
@@ -597,32 +603,32 @@ begin
   Value.c[numBit shr 5] := Value.c[numBit shr 5] or UInt32(1 shl (numBit and 31));
 end;
 
-class function Int128.StrToInt128(Value: string): Int128;
-var
-  i: Integer;
-  neg: Boolean;
+class function Int128.StrToInt128(Value: String): Int128;
 begin
-  if Value = '-170141183460469231731687303715884105728' then begin
-     Result.dc1 := $8000000000000000;
-     Result.dc0 := 0;
-     exit;
-  end;
+  if Value.Length = 0 then Exit(0);
 
   Result := 0;
-  neg := False;
+  var IsNeg := Value[1] = '-';
+  var i := 1;
+  if IsNeg then i := 2;
 
-  for i := 1 to Value.Length do begin
-    if CharInSet(Value[i], ['0'..'9']) then begin
-      Result := Result * Ten;
-      Result := Result + Int32(Ord(Value[i]) - Ord('0'));
-    end else if (i = 1) and (Value[i] = '-') then
-      neg := True
+  for i := i to Value.Length - 1 do begin
+    if CharInSet(Value[i], ['0'..'9']) then
+      Result := Result * Ten + (Ord(Value[i]) - Ord('0'))
     else
       raise EConvertError.Create(Value + ' is not a valid Int128 value.');
   end;
-  if neg then Result := -Result;
 
-  if (Value.Length > 1) and (Result = 0) then raise EIntOverflow.Create(SIntOverflow);
+  i := Value.Length;
+  if CharInSet(Value[i], ['0'..'9']) then begin
+    Result := Result * Ten;
+    var iDigit := Ord(Value[i]) - Ord('0');
+    if IsNeg then
+      Result := -Result - iDigit
+    else
+      Result := Result + iDigit;
+  end else
+    raise EConvertError.Create(Value + ' is not a valid Int128 value.');
 end;
 
 function Int128.Invert: Int128;
@@ -698,10 +704,10 @@ begin
   if c1 then inc2;
   if c2 then inc3;
 
-  if ((Result < 0) and (a > 0) and (b > 0)) then
+  if (Result < 0) and (a > 0) and (b > 0) then
      raise EIntOverflow.Create(SIntOverflow);
 
-  if ((Result > 0) and (a < 0) and (b < 0)) then
+  if (Result > 0) and (a < 0) and (b < 0) then
      raise EIntOverflow.Create(SIntOverflow);
 end;
 
@@ -770,13 +776,6 @@ class operator Int128.Implicit(Value: Int128): string;
 var digit, curValue, nextValue: Int128;
     Neg: Boolean;
 begin
-  if (Value.c3 = $80000000) and (Value.c2 = 0)
-  and (Value.c1 = 0) and (Value.c0 = 0) then
-  begin
-    Result := '-170141183460469231731687303715884105728';
-    Exit;
-  end;
-
   Result := '';
   if Value.b[15] shr 7 = 1 then begin
     curValue := UInt128(Value.Invert()) + 1;
@@ -981,6 +980,7 @@ class operator Int128.Modulus(a: Int128; b: Int128): Int128;
 var temp: Int128;
 begin
   DivMod128(a, b, temp, Result);
+  if a < 0 then Result := -Result;
 end;
 
 class operator Int128.BitwiseOr(a, b: Int128): Int128;
