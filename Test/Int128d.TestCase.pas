@@ -1,4 +1,4 @@
-unit int128Impl.TestCase;
+unit Int128d.TestCase;
 
 interface
 
@@ -76,7 +76,7 @@ type
 
 implementation
 
-uses int128impl, System.SysUtils;
+uses int128d, System.SysUtils;
 
 procedure TInt128_TestCase.Size;
 begin

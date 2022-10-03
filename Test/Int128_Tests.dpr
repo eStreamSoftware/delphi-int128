@@ -12,8 +12,8 @@ program Int128_Tests;
 {$ENDIF}
 uses
   DUnitTestRunner,
-  int128impl in '..\int128impl.pas',
-  int128Impl.TestCase in 'int128Impl.TestCase.pas';
+  Int128d in '..\Int128d.pas',
+  Int128d.TestCase in 'Int128d.TestCase.pas';
 
 {$R *.RES}
 begin

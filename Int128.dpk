@@ -32,6 +32,6 @@ requires
   rtl;
 
 contains
-  int128impl in 'int128impl.pas';
+  Int128d in 'Int128d.pas';
 
 end.

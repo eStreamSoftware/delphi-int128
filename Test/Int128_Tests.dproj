@@ -178,8 +178,8 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="..\int128impl.pas"/>
-        <DCCReference Include="int128Impl.TestCase.pas"/>
+        <DCCReference Include="..\Int128d.pas"/>
+        <DCCReference Include="Int128d.TestCase.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
