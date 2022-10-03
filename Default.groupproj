@@ -3,7 +3,7 @@
         <ProjectGuid>{63E3DB83-A9A0-4679-B21C-49671311CD27}</ProjectGuid>
     </PropertyGroup>
     <ItemGroup>
-        <Projects Include="Int128.dproj">
+        <Projects Include="Int128p.dproj">
             <Dependencies/>
         </Projects>
         <Projects Include="Test\Int128_Tests.dproj">
@@ -17,14 +17,14 @@
             <Default.Personality/>
         </BorlandProject>
     </ProjectExtensions>
-    <Target Name="Int128">
-        <MSBuild Projects="Int128.dproj"/>
+    <Target Name="Int128p">
+        <MSBuild Projects="Int128p.dproj"/>
     </Target>
-    <Target Name="Int128:Clean">
-        <MSBuild Projects="Int128.dproj" Targets="Clean"/>
+    <Target Name="Int128p:Clean">
+        <MSBuild Projects="Int128p.dproj" Targets="Clean"/>
     </Target>
-    <Target Name="Int128:Make">
-        <MSBuild Projects="Int128.dproj" Targets="Make"/>
+    <Target Name="Int128p:Make">
+        <MSBuild Projects="Int128p.dproj" Targets="Make"/>
     </Target>
     <Target Name="Int128_Tests">
         <MSBuild Projects="Test\Int128_Tests.dproj"/>
@@ -36,13 +36,13 @@
         <MSBuild Projects="Test\Int128_Tests.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="Int128;Int128_Tests"/>
+        <CallTarget Targets="Int128p;Int128_Tests"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="Int128:Clean;Int128_Tests:Clean"/>
+        <CallTarget Targets="Int128p:Clean;Int128_Tests:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="Int128:Make;Int128_Tests:Make"/>
+        <CallTarget Targets="Int128p:Make;Int128_Tests:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>
