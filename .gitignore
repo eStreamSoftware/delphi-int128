@@ -11,5 +11,6 @@ Win64/
 *Resource.rc
 *.stat
 *.dcu
+*.dsv
 __recovery
 __history
